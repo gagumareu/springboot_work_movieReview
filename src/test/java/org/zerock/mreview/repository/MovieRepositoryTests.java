@@ -14,7 +14,6 @@ import org.zerock.mreview.entity.MovieImage;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
@@ -25,7 +24,7 @@ public class MovieRepositoryTests {
     private MovieRepository movieRepository;
 
     @Autowired
-    private MovieImgeRepository movieImgeRepository;
+    private MovieImageRepository movieImgeRepository;
 
     @Commit
     @Transactional
