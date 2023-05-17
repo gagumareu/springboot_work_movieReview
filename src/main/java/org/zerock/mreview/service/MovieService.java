@@ -29,6 +29,7 @@ public interface MovieService {
 
         // MovieImageDTO 처리
         if(imageDTOList != null && imageDTOList.size() > 0){
+
             List<MovieImage> movieImageList = imageDTOList.stream().map(movieImageDTO -> {
                 MovieImage movieImage = MovieImage.builder()
                         .path(movieImageDTO.getPath())
@@ -36,8 +37,10 @@ public interface MovieService {
                         .uuid(movieImageDTO.getUuid())
                         .movie(movie)
                         .build();
+
                 return movieImage;
             }).collect(Collectors.toList());
+
             entityMap.put("imgList", movieImageList);
         }
         return entityMap;

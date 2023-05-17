@@ -26,7 +26,9 @@ public class MovieServiceImpl implements MovieService{
     public Long register(MovieDTO movieDTO) {
 
         Map<String, Object> entityMap = dtoToEntity(movieDTO);
+
         Movie movie = (Movie) entityMap.get("movie");
+
         List<MovieImage> movieImageList = (List<MovieImage>) entityMap.get("imgList");
 
         movieRepository.save(movie);
