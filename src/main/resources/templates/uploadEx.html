@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+  <input name="uploadFiles" type="file" multiple>
+  <button class="uploadBtn">Upload</button>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+    $(".uploadBtn").on("click", function (){
+
+      var formData = new FormData();
+
+      var inputFile = $("input[type='file']");
+
+      var files = inputFile[0].files;
+
+      for (var i = 0; i < files.length; i++){
+        console.log(files[i]);
+        formData.append("uploadFiles", files[i]);
+      }
+
+      // 실제 업로드 부분
+      // upload ajax
+      $.ajax({
+          url: '/uploadAjax',
+          processData: false,
+          contentType: false,
+          data: formData,
+          type: 'POST',
+          dataType: 'json',
+          success: function (result){
+              console.log(result);
+          },
+          error: function (jqXHR, textStatus, errorThrown){
+              console.log(textStatus);
+          }
+      });
+
+    });
+  </script>
+
+</body>
+</html>
