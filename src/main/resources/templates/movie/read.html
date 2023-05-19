@@ -52,7 +52,7 @@
 
         <div class="uploadResult">
             <ul>
-                <li th:each="movieImage: ${dto.imageDTOList}">
+                <li th:each="movieImage: ${dto.imageDTOList}" th:data-file="${movieImage.getThumbnailURL()}">
                     <img th:if="${movieImage.path != null}" th:src="|/display?fileName=${movieImage.getThumbnailURL()}|">
                 </li>
             </ul>
@@ -203,6 +203,85 @@
                     });
                 }
                 getMovieReviews();
+
+                var reviewnum;
+
+                $(".reviewList").on("click", ".card-body", function (){
+
+                   $(".reviewSaveBtn").hide();
+                   $(".removeBtn, .modifyBtn").show();
+
+                   var targetReview = $(this);
+
+                   reviewnum = targetReview.data("reviewnum");
+                   console.log("reviewnum: " + reviewnum);
+                   inputMid.val(targetReview.data("mid"));
+                   inputText.val(targetReview.find('.card-title').clone().children().remove().end().text());
+
+                   var grade = targetReview.find('.card-title span').html();
+                   $(".starrr a:nth-child("+grade+")").trigger("click");
+
+                   $('.reviewModal').modal('show');
+
+                }); // reviewList card body clicking
+
+                $(".modifyBtn").on("click", function (){
+
+                    var data = {
+                        reviewnum: reviewnum,
+                        mno: mno,
+                        grade: grade,
+                        text: inputText.val(),
+                        min: inputMid.val()
+                    }
+
+                    console.log(data);
+
+                    $.ajax({
+                        url: '/reviews/' + mno + "/" + reviewnum,
+                        type: 'PUT',
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "text",
+                        success: function (result){
+                            console.log(result);
+                            self.location.reload();
+                        }
+                    });
+                    reviewModal.modal('hide');
+                });
+
+                $(".removeBtn").on("click", function (){
+
+                    var data = {
+                        reviewnum: reviewnum
+                    }
+                    console.log(data);
+
+                    $.ajax({
+                        url: '/reviews/' + mno + "/" + reviewnum,
+                        type: 'DELETE',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "text",
+                        success: function (result){
+                            console.log(result);
+                            self.location.reload();
+                        }
+                    })
+                    reviewModal.modal('hide');
+                }); // removeBtn clicking
+
+                $(".uploadResult li").on("click", function (){
+
+                    var file = $(this).data("file");
+
+                    console.log(file);
+
+                    $(".imageModal .modal-body").html("<img style='width: 100%' src='/display?fileName="+file+"&size=1'>");
+
+                    $(".imageModal").modal("show");
+                });
+
             });
         </script>
     </th:blcok>
